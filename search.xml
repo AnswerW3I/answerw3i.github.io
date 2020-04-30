@@ -1,47 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Cobalt Strike 学习（一）</title>
-    <url>/2020/01/31/2020-01-31/</url>
-    <content><![CDATA[<h1 id="Cobalt-Strike-学习（一）"><a href="#Cobalt-Strike-学习（一）" class="headerlink" title="Cobalt Strike 学习（一）"></a>Cobalt Strike 学习（一）</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Cobalt Strike是一款多人协同的渗透测试框架，集成大量的功能，也有人将其形容为带图形界面的MSF，简称CS。</p>
+    <title>2020-04-30</title>
+    <url>/2020/04/30/2020-04-30/</url>
+    <content><![CDATA[<h1 id="IP协议学习笔记"><a href="#IP协议学习笔记" class="headerlink" title="IP协议学习笔记"></a>IP协议学习笔记</h1><p><em>回顾下之前所学习过的IP基础知识</em></p>
+<hr>
 <a id="more"></a>
 
-<p>CS分为客户端和服务端。通常情况下，在外网或其他环境搭建一台服务器，然后通过客户端连上服务器，进行多人协同的渗透测试。</p>
-<p>CS运行需要Java环境，且服务端需要Linux环境，在Linux环境下，需要有teamserver和cobaltstrike.jar这两个文件，并放到同一个目录，然后运行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./teamserver ip passwd  <span class="comment"># ip为服务器的公网ip</span></span><br></pre></td></tr></table></figure>
+<h2 id="IP协议"><a href="#IP协议" class="headerlink" title="IP协议"></a>IP协议</h2><p>IP协议位于OSI七层参考模型中的网络层，位于TCP/IP分层模型的互联网层（有些资料也称为网络层），在互联网中，主机使用IP地址作为其主机的标识，实现互联网中不同的主机之间数据的转发，IP协议不具有重发性，面向无连接型，属于非可靠性传输协议。本文主要介绍的是IPv4协议。<br>##IPv4<br>IPv4的地址长度为4个八位字节，即32个比特位。<br><br>在windows下cmd查看本机的IP地址的命令为：<code>ipconfig</code><br><br>在linux下查看本机IP地址的命令为：<code>ifconfig</code><br></p>
+<h3 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h3><p>IP地址由两个部分组成，一是<strong>“网络标识(地址)”</strong>，二是<strong>“主机标识(地址)”</strong><br><br>常见的IP地址我们把它们分为四大类，A类，B类，C类，D类（其中这四大类不包括从未使用的E类），这四大类是根据IP地址中的前面四位比特列进行划分的<br><br>PS：我们在对IP地址分类的时候，需要把IP地址从十进制数转换成二进制数来进行划分：如<code>192.168.10.11</code>&nbsp;转换成二进制数就是<code>1100 0000 . 1010 1000 . 0000 1010 . 0000 1011</code>(ps:转换成二进制的IP地址是不用<code>.</code>分开的，这里用<code>.</code>分开是为了好分析),通常来说，我们会把一个IP地址分为四个段，A段，B段，C段和D段。每8位数（二进制）作为一个分界点，比如，在<code>192.168.10.11</code>这个IP地址中，<code>192</code>就是这个IP地址的的A段，<code>168</code>就是B段，<code>10</code>就是C段，<code>11</code>就是D段。</p>
+<blockquote>
+<ol>
+<li>A类地址：开头的是0 &nbsp; 其前8位作为网络标识 &nbsp; 后24位作为主机标识 &nbsp; 网络地址的范围是0.0.0.0~127.0.0.0</li>
+<li>B类地址：开头的是10 &nbsp; 其前16位作为网络标识 &nbsp; 后16位作为主机标识 &nbsp; 网络地址的范围是128.0.0.0~191.255.0.0</li>
+<li>C类地址：开头的是110 &nbsp; 其前24位作为网络标识 &nbsp; 后8位作为主机标识 &nbsp; 网络地址的范围是192.0.0.0~239.255.255.0</li>
+<li>D类地址：开头的是1110 &nbsp; 其前32位就是它的网络标识 &nbsp; 无主机标识，常被用于多播 &nbsp; 网络地址的范围是224.0.0.0~239.255.255.255</li>
+</ol>
+</blockquote>
+<h4 id="几个特殊的IP地址"><a href="#几个特殊的IP地址" class="headerlink" title="几个特殊的IP地址"></a>几个特殊的IP地址</h4><blockquote>
+<ol>
+<li>网络地址：主机位全为0。</li>
+<li>广播地址：主机位全为1。</li>
+<li>保留地址：<code>0.0.0.0</code>，可以表示整个网络上的IP地址。</li>
+<li>回送地址：<code>127.0.0.1</code> &nbsp; 通常，这个地址用于网络软件测试以及本地机进程间通信。比如，我们在本地搭建web服务的时候，默认的访问地址就是<code>127.0.0.1</code></li>
+<li>私网地址：仅用于组建专用局域网的主机地址，这些地址通常只用在内网中，不用于公网<br>1个连续的A类地址：<code>10.0.0.0~10.255.255.255</code><br>16个连续的B类地址：<code>172.16.0.0~172.31.255.255</code><br>256个连续的C类地址：<code>192.168.0.0~192.168.255.255</code><br></li>
+</ol>
+</blockquote>
+<p>PS:由于每个网络段都会存在网络地址和广播地址这两个特殊地址，所以我们在计算一个网络段里面能有多少台主机的时候，要减去这两个地址，比如一个C类的网络段里面能容纳的主机个数为:256-2=254</p>
+<h3 id="子网与子网掩码"><a href="#子网与子网掩码" class="headerlink" title="子网与子网掩码"></a>子网与子网掩码</h3><p><strong>子网</strong>(Subnet)，简单来讲，就是把A类，B类，C类分类中的部分主机地址拿出来进行网络划分，其作用是把一个IP地址继续细分，分出比A类，B类，C类粒度更小的网络，子网的划分可以让网络管理者更好的管理网络，比如可以用子网划分来对公司部门里面的主机进行划分管理，可以提高IP的地址的利用率。<br><br><strong>子网掩码</strong>(Subnet mask)：用来指明一个IP地址中，那些是网络标识，那些是主机标识，用于划分网络地址和主机地址，子网掩码通常有两种表示方法，一种是直接把网络号用全<code>1</code>表示，另外一种是在IP地址后面添加网络地址数，用<code>/</code>隔开。通过子网掩码，我们可以把IP地址分类成更小的网络或者合并一个大网络。<br><br>比如：<code>192.168.10.11</code>的子网掩码可以表示为：<code>255.255.255.0</code>或者<code>192.168.10.11/24</code>，24表示前面的24位为网络号。<br><br><br>合并网络的<strong>CIDR</strong>(Classless Inter-Domain Routing,无类别域间路由)：通过CIDR可以按任意长度对IP地址中的网络标识和主机标识进行划分。用于解决IPv4地址不足的一种方法。<br><br>例如：合并两个C类地址，利用CIDR将IP地址划分：<code>222.222.192.0/22</code>&nbsp;&nbsp;其网络标识为：<code>1101 1110. 1101 1110. 1100 00</code><br>可以把网络IP范围是：<code>222.222.192.1</code>~<code>222.222.195.254</code>之间的IP地址合并成同一个网络，它们的网络标识都是一样的。</p>
+<h5 id="举栗子-："><a href="#举栗子-：" class="headerlink" title="举栗子 ："></a>举栗子 ：</h5><p>栗子1：<strong>IP地址分析</strong></p>
+<blockquote>
+<p>IP地址为：<code>192.168.10.11/26</code> &nbsp; 二进制表示为：<code>1100 0000 . 1010 1000 . 0000 1010 . 0000 1011</code><br><br>在这个IP地址中，我们可以得知，这是一个私网的C类地址，通常用于内网中，<br><br>其子网掩码为：<code>255.255.255.192</code> &nbsp; 二进制表示为：<code>1111 1111. 1111 1111. 1111 1111. 1100 0000</code><br><br>其网络标识为：<code>192.168.10.0</code> &nbsp; 二进制表示为：<code>1100 0000 . 1010 1000 . 0000 1010 . 00</code><br><br>其主机标识为：<code>11</code> &nbsp; 二进制表示为: <code>00 1011</code><br>其广播地址：<code>192.168.10.63</code> &nbsp; 二进制表示为：<code>1100 0000 . 1010 1000 . 0000 1010 . 0011 1111</code><br></p>
+</blockquote>
+<p>栗子2：<strong>主机通信1</strong></p>
+<blockquote>
+<p>主机A的IP地址：<code>192.168.10.11/26</code> &nbsp; 主机B的IP地址：<code>192.168.10.48/24</code><br><br>问：主机A和B之间能否直接通信？<br><br>答案是：可以。我们来分析下：<br><br>A的IP为：<code>192.168.10.11/26</code>&nbsp; 即：<code>1100 0000 . 1010 1000 . 0000 1010 . 0000 1011</code><br><br>B的IP为：<code>192.168.10.48/24</code>&nbsp; 即：<code>1100 0000 . 1010 1000 . 0000 1010 . 0011 0000</code><br><br>显然这两个主机的IP都包含在网络号为：<code>192.168.10.0</code>的网络段里面，它们的网络号相同，所以他们之间可以相互通信。<br></p>
+</blockquote>
+<p>栗子3：<strong>主机通信2</strong></p>
+<blockquote>
+<p>主机A的IP地址：<code>192.168.10.148/26</code> &nbsp; 主机B的IP地址：<code>192.168.10.1/24</code><br><br>问：主机A和B之间能否直接通信？<br><br>答案是：不可以。我们来分析下：<br><br>A的IP为：<code>192.168.10.148/26</code>&nbsp; 二进制为：<code>1100 0000 . 1010 1000 . 0000 1010 . 1001 0100</code><br><br>B的IP为：<code>192.168.10.1/24</code>&nbsp; 二进制为：<code>1100 0000 . 1010 1000 . 0000 1010 . 0000 0001</code><br><br>A的网络标识为：<code>192.168.10.128</code>，&nbsp; B的网络标识为：<code>192.168.10.0</code>。它们的网络标识不同，所处的网络段也不同，所以他们的网络不能直接通信。<br></p>
+</blockquote>
+<hr>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>协议</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2020-03-30</title>
+    <url>/2020/03/30/2020-03-30/</url>
+    <content><![CDATA[<h1 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nmap（网络映射器）是一款用于网络发现和安全审计的网络安全工具，它是自由软件。软件名字Nmap是Network Mapper的简称。通常情况下，Nmap用于：</p>
+<a id="more"></a>
 
+<ul>
+<li>列举网络主机清单</li>
+<li>管理服务升级调度</li>
+<li>监控主机</li>
+<li>服务运行状况</li>
+</ul>
+<p>Nmap可以检测目标主机是否在线、端口开放情况、侦测运行的服务类型及版本信息、侦测操作系统与设备类型等信息。 它是网络管理员必用的软件之一，用以评估网络系统安全。（选自维基百科）</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>端口状态：<br><strong>open(开放的)</strong><br>应用程序正在该端口接收TCP 连接或者UDP报文。<br><strong>closed(关闭的)</strong><br>关闭的端口对于Nmap也是可访问的(它接受Nmap的探测报文并作出响应)， 但没有应用程序在其上监听。<br><strong>filtered(被过滤的)</strong><br>由于包过滤阻止探测报文到达端口， Nmap无法确定该端口是否开放。<br><strong>unfiltered(未被过滤的)</strong><br>未被过滤状态意味着端口可访问，但Nmap不能确定它是开放还是关闭，只有ACK扫描才会出现这种状态。<br><strong>open|filtered(开放或者被过滤的)</strong><br>当无法确定端口是开放还是被过滤的，Nmap就把该端口划分成 这种状态。开放的端口不响应就是一个例子。<br><strong>closed|filtered(关闭或者被过滤的)</strong><br>该状态用于Nmap不能确定端口是关闭的还是被过滤的。 它只可能出现在IPID Idle扫描中</p>
+<h2 id="基本用法："><a href="#基本用法：" class="headerlink" title="基本用法："></a>基本用法：</h2><blockquote>
+<p>nmap的命令众多，在此就不一样列举，只列举一些常用的</p>
+</blockquote>
+<p> 常见的命令和参数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-vv 				对扫描结果进行详细输出</span><br><span class="line">-p &lt;port1,port2...&gt;	对特定端口进行扫描</span><br><span class="line">-p &lt;port1-port2&gt;	对范围内的端口进行扫描</span><br><span class="line">-sP					采用ping扫描</span><br><span class="line">-O					探测操作系统类型</span><br><span class="line">-sV					版本扫描，指纹识别</span><br><span class="line">-sL					列表扫描</span><br><span class="line">-sn					不进行端口扫描，仅用来寻找存活的主机，采用的是Ping扫描</span><br><span class="line">-Pn					不进行ping扫描，跳过主机发现阶段</span><br><span class="line">-sS					采用TCP半开放扫描（root和administrator默认方式），因为未完成三次握手，所以不会留下痕迹</span><br><span class="line">-sT					TCP connect连接，会完成三次握手，留下痕迹</span><br><span class="line">-F					快速扫描		</span><br><span class="line">--top-ports			扫描常见端口</span><br><span class="line">-f					分片扫描，不建议对较旧系统使用</span><br><span class="line">-oX					xml输出</span><br><span class="line">-oN				标准输出</span><br></pre></td></tr></table></figure>
 
+<h2 id="脚本扫描："><a href="#脚本扫描：" class="headerlink" title="脚本扫描："></a>脚本扫描：</h2><p>nmap在扫描的时候可以使用很多脚本<br>在kali下，我们可以用命令    <code>locate *.nse</code> 来查找当前主机所有的NSE脚本</p>
+<p>比如对目标进行ms08-07扫描</p>
+<p>当然，前期收集的时候，也可以使用-去进行扫描，<br>或者</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-A	次选项设置包含了1-10000的端口ping扫描，操作系统扫描，脚本扫描，路由跟踪，服务探测</span><br><span class="line">-Sc	默认脚本扫描</span><br></pre></td></tr></table></figure>
 
-<h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>攻击机： Windows7 x64 SP1        192.168.80.145</p>
-<p>服务器： Ubuntu Server16.04    192.168.80.144</p>
-<p>目标机： Windows 7 x86 SP1        192.168.80.135</p>
-<p>首先，把相应的文件放在服务器上，然后启动（需要root权限）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./teamserver 192.168.80.144 <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/2020/01/31/2020-01-31/cs1.jpg" alt></p>
-<p>然后攻击机打开客户端，输入ip端口和密码，用户随意</p>
-<p><img src="/2020/01/31/2020-01-31/cs2.jpg" alt></p>
-<p>然后新建一个Listener</p>
-<p><img src="/2020/01/31/2020-01-31/cs3.jpg" alt></p>
-<p>生成payload</p>
-<p>点击菜单栏中的Attacks-&gt;Packages-&gt;Windows Executable</p>
-<p>选择payload的类型</p>
-<p><img src="/2020/01/31/2020-01-31/cs4.jpg" alt></p>
-<p>生成</p>
-<p>将生成好的exe文件放入到目标机中，运行，在客户端就可以看到，目标上线。</p>
-<p><img src="/2020/01/31/2020-01-31/cs5.jpg" alt></p>
-<p>右键点击目标机，选择Interact进行连接目标机，得到一个beacon的命令行操作界面。</p>
-<p>输入help可以看到有关beacon的各种命令，感觉有点像Empire的操作界面，使用cmd命令的时候前面需要加个 shell。如</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shell whoami</span><br></pre></td></tr></table></figure>
-
-<p>返回的是目标的用户名。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文介绍了Cobalt Strike的一些基础的操作，Cobalt Strike是一款功能很强大的渗透测试框架，总的来说是一款使用体验很好的框架，CS的其他功能等后续的文章在做介绍。</p>
+<h2 id="信息收集类脚本："><a href="#信息收集类脚本：" class="headerlink" title="信息收集类脚本："></a>信息收集类脚本：</h2><h3 id="http-methods"><a href="#http-methods" class="headerlink" title="http-methods"></a>http-methods</h3><p>通过这个脚本，可以获取Web服务器支持的HTTP方法<br><code>--script http-methods</code><br>如：<code>nmap -p 80,445 --script http-methods www.baidu.com</code></p>
+<h3 id="修改http头"><a href="#修改http头" class="headerlink" title="修改http头:"></a>修改http头:</h3><p>如：<code>nmap -p 80,443 --script http-methods --script-args http.useragent=&quot;Mozilla 42&quot; www.baidu.com</code></p>
+<h2 id="高级主机发现类脚本"><a href="#高级主机发现类脚本" class="headerlink" title="高级主机发现类脚本"></a>高级主机发现类脚本</h2><h3 id="broadcast-ping-nse"><a href="#broadcast-ping-nse" class="headerlink" title="broadcast-ping.nse"></a>broadcast-ping.nse</h3><p>作用：发现本地网络中的活跃主机<br>使用：<code>nmap --script broadcast-ping</code></p>
+<h3 id="targets-sniffer"><a href="#targets-sniffer" class="headerlink" title="targets-sniffer"></a>targets-sniffer</h3><p>作用：发现本地网络中的所有主机，需要特权模式，也可以使用-e来执行网络监听</p>
+<p>使用：<code>nmap -sL --script=targets-sniffer -e &lt;interface&gt;</code></p>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><p>在使用Nmap进行扫描中，尽量不要使用Ping扫描，这是因为Ping扫描的原理是向目标机器发送ICMP报文，而通常情况下，ICMP报文是会被大多数防火墙给过滤掉的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Nmap作为一款十分流行的扫描器，功能还是很强大的，本文也只是对常用的命令做下总结，仅做参考。</p>
 ]]></content>
       <categories>
         <category>学习</category>
       </categories>
       <tags>
         <tag>渗透测试</tag>
+        <tag>信息收集</tag>
       </tags>
   </entry>
   <entry>
@@ -97,6 +143,50 @@
       </tags>
   </entry>
   <entry>
+    <title>Cobalt Strike 学习（一）</title>
+    <url>/2020/01/31/2020-01-31/</url>
+    <content><![CDATA[<h1 id="Cobalt-Strike-学习（一）"><a href="#Cobalt-Strike-学习（一）" class="headerlink" title="Cobalt Strike 学习（一）"></a>Cobalt Strike 学习（一）</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Cobalt Strike是一款多人协同的渗透测试框架，集成大量的功能，也有人将其形容为带图形界面的MSF，简称CS。</p>
+<a id="more"></a>
+
+<p>CS分为客户端和服务端。通常情况下，在外网或其他环境搭建一台服务器，然后通过客户端连上服务器，进行多人协同的渗透测试。</p>
+<p>CS运行需要Java环境，且服务端需要Linux环境，在Linux环境下，需要有teamserver和cobaltstrike.jar这两个文件，并放到同一个目录，然后运行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./teamserver ip passwd  <span class="comment"># ip为服务器的公网ip</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>攻击机： Windows7 x64 SP1        192.168.80.145</p>
+<p>服务器： Ubuntu Server16.04    192.168.80.144</p>
+<p>目标机： Windows 7 x86 SP1        192.168.80.135</p>
+<p>首先，把相应的文件放在服务器上，然后启动（需要root权限）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./teamserver 192.168.80.144 <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/01/31/2020-01-31/cs1.jpg" alt></p>
+<p>然后攻击机打开客户端，输入ip端口和密码，用户随意</p>
+<p><img src="/2020/01/31/2020-01-31/cs2.jpg" alt></p>
+<p>然后新建一个Listener</p>
+<p><img src="/2020/01/31/2020-01-31/cs3.jpg" alt></p>
+<p>生成payload</p>
+<p>点击菜单栏中的Attacks-&gt;Packages-&gt;Windows Executable</p>
+<p>选择payload的类型</p>
+<p><img src="/2020/01/31/2020-01-31/cs4.jpg" alt></p>
+<p>生成</p>
+<p>将生成好的exe文件放入到目标机中，运行，在客户端就可以看到，目标上线。</p>
+<p><img src="/2020/01/31/2020-01-31/cs5.jpg" alt></p>
+<p>右键点击目标机，选择Interact进行连接目标机，得到一个beacon的命令行操作界面。</p>
+<p>输入help可以看到有关beacon的各种命令，感觉有点像Empire的操作界面，使用cmd命令的时候前面需要加个 shell。如</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shell whoami</span><br></pre></td></tr></table></figure>
+
+<p>返回的是目标的用户名。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文介绍了Cobalt Strike的一些基础的操作，Cobalt Strike是一款功能很强大的渗透测试框架，总的来说是一款使用体验很好的框架，CS的其他功能等后续的文章在做介绍。</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>渗透测试</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2020/01/01/hello-world/</url>
     <content><![CDATA[<h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World!"></a>Hello World!</h1><p>“Hello World”</p>
@@ -111,47 +201,6 @@
       </categories>
       <tags>
         <tag>随想</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2020-03-30</title>
-    <url>/2020/03/30/2020-03-30/</url>
-    <content><![CDATA[<h1 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nmap（网络映射器）是一款用于网络发现和安全审计的网络安全工具，它是自由软件。软件名字Nmap是Network Mapper的简称。通常情况下，Nmap用于：</p>
-<a id="more"></a>
-
-<ul>
-<li>列举网络主机清单</li>
-<li>管理服务升级调度</li>
-<li>监控主机</li>
-<li>服务运行状况</li>
-</ul>
-<p>Nmap可以检测目标主机是否在线、端口开放情况、侦测运行的服务类型及版本信息、侦测操作系统与设备类型等信息。 它是网络管理员必用的软件之一，用以评估网络系统安全。（选自维基百科）</p>
-<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>端口状态：<br><strong>open(开放的)</strong><br>应用程序正在该端口接收TCP 连接或者UDP报文。<br><strong>closed(关闭的)</strong><br>关闭的端口对于Nmap也是可访问的(它接受Nmap的探测报文并作出响应)， 但没有应用程序在其上监听。<br><strong>filtered(被过滤的)</strong><br>由于包过滤阻止探测报文到达端口， Nmap无法确定该端口是否开放。<br><strong>unfiltered(未被过滤的)</strong><br>未被过滤状态意味着端口可访问，但Nmap不能确定它是开放还是关闭，只有ACK扫描才会出现这种状态。<br><strong>open|filtered(开放或者被过滤的)</strong><br>当无法确定端口是开放还是被过滤的，Nmap就把该端口划分成 这种状态。开放的端口不响应就是一个例子。<br><strong>closed|filtered(关闭或者被过滤的)</strong><br>该状态用于Nmap不能确定端口是关闭的还是被过滤的。 它只可能出现在IPID Idle扫描中</p>
-<h2 id="基本用法："><a href="#基本用法：" class="headerlink" title="基本用法："></a>基本用法：</h2><blockquote>
-<p>nmap的命令众多，在此就不一样列举，只列举一些常用的</p>
-</blockquote>
-<p> 常见的命令和参数</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-vv 				对扫描结果进行详细输出</span><br><span class="line">-p &lt;port1,port2...&gt;	对特定端口进行扫描</span><br><span class="line">-p &lt;port1-port2&gt;	对范围内的端口进行扫描</span><br><span class="line">-sP					采用ping扫描</span><br><span class="line">-O					探测操作系统类型</span><br><span class="line">-sV					版本扫描，指纹识别</span><br><span class="line">-sL					列表扫描</span><br><span class="line">-sn					不进行端口扫描，仅用来寻找存活的主机，采用的是Ping扫描</span><br><span class="line">-Pn					不进行ping扫描，跳过主机发现阶段</span><br><span class="line">-sS					采用TCP半开放扫描（root和administrator默认方式），因为未完成三次握手，所以不会留下痕迹</span><br><span class="line">-sT					TCP connect连接，会完成三次握手，留下痕迹</span><br><span class="line">-F					快速扫描		</span><br><span class="line">--top-ports			扫描常见端口</span><br><span class="line">-f					分片扫描，不建议对较旧系统使用</span><br><span class="line">-oX					xml输出</span><br><span class="line">-oN				标准输出</span><br></pre></td></tr></table></figure>
-
-<h2 id="脚本扫描："><a href="#脚本扫描：" class="headerlink" title="脚本扫描："></a>脚本扫描：</h2><p>nmap在扫描的时候可以使用很多脚本<br>在kali下，我们可以用命令    <code>locate *.nse</code> 来查找当前主机所有的NSE脚本</p>
-<p>比如对目标进行ms08-07扫描</p>
-<p>当然，前期收集的时候，也可以使用-去进行扫描，<br>或者</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-A	次选项设置包含了1-10000的端口ping扫描，操作系统扫描，脚本扫描，路由跟踪，服务探测</span><br><span class="line">-Sc	默认脚本扫描</span><br></pre></td></tr></table></figure>
-
-<h2 id="信息收集类脚本："><a href="#信息收集类脚本：" class="headerlink" title="信息收集类脚本："></a>信息收集类脚本：</h2><h3 id="http-methods"><a href="#http-methods" class="headerlink" title="http-methods"></a>http-methods</h3><p>通过这个脚本，可以获取Web服务器支持的HTTP方法<br><code>--script http-methods</code><br>如：<code>nmap -p 80,445 --script http-methods www.baidu.com</code></p>
-<h3 id="修改http头"><a href="#修改http头" class="headerlink" title="修改http头:"></a>修改http头:</h3><p>如：<code>nmap -p 80,443 --script http-methods --script-args http.useragent=&quot;Mozilla 42&quot; www.baidu.com</code></p>
-<h2 id="高级主机发现类脚本"><a href="#高级主机发现类脚本" class="headerlink" title="高级主机发现类脚本"></a>高级主机发现类脚本</h2><h3 id="broadcast-ping-nse"><a href="#broadcast-ping-nse" class="headerlink" title="broadcast-ping.nse"></a>broadcast-ping.nse</h3><p>作用：发现本地网络中的活跃主机<br>使用：<code>nmap --script broadcast-ping</code></p>
-<h3 id="targets-sniffer"><a href="#targets-sniffer" class="headerlink" title="targets-sniffer"></a>targets-sniffer</h3><p>作用：发现本地网络中的所有主机，需要特权模式，也可以使用-e来执行网络监听</p>
-<p>使用：<code>nmap -sL --script=targets-sniffer -e &lt;interface&gt;</code></p>
-<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><p>在使用Nmap进行扫描中，尽量不要使用Ping扫描，这是因为Ping扫描的原理是向目标机器发送ICMP报文，而通常情况下，ICMP报文是会被大多数防火墙给过滤掉的。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Nmap作为一款十分流行的扫描器，功能还是很强大的，本文也只是对常用的命令做下总结，仅做参考。</p>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>渗透测试</tag>
-        <tag>信息收集</tag>
       </tags>
   </entry>
 </search>
